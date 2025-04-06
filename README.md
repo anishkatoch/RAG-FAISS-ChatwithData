@@ -58,7 +58,7 @@ Each file is parsed, processed, split, embedded using OpenAI embeddings, and sto
 
 ## 🖥️ UI Preview
 
-![Smart Data Assistant UI Preview](https://user-images.githubusercontent.com/placeholder-image.png) <!-- Replace with actual screenshot URL -->
+![Smart Data Assistant UI Preview](https://ragpoweredchatwithdata.streamlit.app/) <!-- Replace with actual screenshot URL -->
 
 ---
 
