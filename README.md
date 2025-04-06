@@ -22,6 +22,14 @@
 
 ---
 
+## 🖥️ Try it Live
+
+[![Open in Streamlit](https://ragpoweredchatwithdata.streamlit.app/)
+
+> 🚀 **Click the badge above to launch the Smart Data Assistant!**
+
+---
+
 ## 📂 File Upload Zone
 
 Users can upload:
@@ -56,25 +64,3 @@ Each file is parsed, processed, split, embedded using OpenAI embeddings, and sto
 
 ---
 
-## 🖥️ UI Preview
-
-![Smart Data Assistant UI Preview](https://ragpoweredchatwithdata.streamlit.app/) <!-- Replace with actual screenshot URL -->
-
----
-
-## 🔧 Setup Instructions
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/smart-data-assistant.git
-cd smart-data-assistant
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set your OpenAI API key
-touch .env
-echo "OPENAI_API_KEY=your-key-here" >> .env
-
-# Run the Streamlit app
-streamlit run dataAssistant.py
