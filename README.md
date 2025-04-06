@@ -57,6 +57,43 @@ Each file is parsed, processed, split, embedded using OpenAI embeddings, and sto
 
 ---
 
+## 🔍 How It Works: RAG + FAISS
+
+**Smart Data Assistant** uses **Retrieval-Augmented Generation (RAG)** to combine the power of GPT-4 with knowledge extracted from your uploaded documents.
+
+---
+
+### 🧠 RAG Flow Overview
+
+**User Query → Search Chunks (FAISS) → Send Top Matches to GPT-4 → Get Answer**
+
+1. **📄 File Parsing**  
+   Upload PDFs, DOCXs, TXTs, or PPTXs — they’re read and converted into raw text.
+
+2. **🔪 Chunking**  
+   The text is split into smaller, meaningful chunks to preserve context.
+
+3. **🧬 Embedding with OpenAI**  
+   Each chunk is converted to a vector using OpenAI’s embedding model.
+
+4. **📡 FAISS Vector Store**  
+   These vectors are stored in a FAISS index to enable fast similarity-based retrieval.
+
+5. **🔍 Real-Time Retrieval (RAG)**  
+   When a user submits a query:
+   - It’s embedded into a vector
+   - FAISS retrieves the most relevant chunks
+   - Chunks + query go into GPT-4 → 🤖 contextual, document-based answer
+
+6. **🧠 Conversational Memory**  
+   LangChain summarizes past interactions to maintain context through the conversation.
+
+---
+
+💡 This system enables GPT-4 to provide **accurate, source-grounded responses** — even across large, multi-document uploads.
+
+---
+
 ## 🧪 Features
 
 - ✅ Multi-format file support
