@@ -21,10 +21,13 @@
 - 🔄 Summarize previous chat history using LangChain's memory buffer
 
 ---
+## 🖥️ Try It Live
 
-## 🖥️ Try it Live
+👉 **[Click here to try Smart Data Assistant on Streamlit! 🚀](https://ragpoweredchatwithdata.streamlit.app)**
 
-[![Open in Streamlit](https://ragpoweredchatwithdata.streamlit.app/)
+> No install needed – just upload your files and start chatting with your data.
+
+---
 
 > 🚀 **Click the badge above to launch the Smart Data Assistant!**
 
