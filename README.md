@@ -1,4 +1,5 @@
 # RAG-FAISS-ChatwithData
+Note :- For a deeper technical explanation of the main technical components, please refer to the Word document uploaded in the repository.
 
 # 📚 Smart Data Assistant
 
