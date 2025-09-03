@@ -225,15 +225,15 @@ def main():
                     input_data.extend([("PPTX", file) for file in pptx_files])
 
                 if not input_data:
-                    # If no files uploaded, show default DOCX content
+                    # If no files uploaded, process the default DOCX for chat
                     try:
-                        doc = Document('Sample-AI Overview.docx')
-                        text = '\n'.join([para.text for para in doc.paragraphs])
-                        st.info("No files uploaded. Showing default document:")
-                        st.markdown(f"<div style='background:#fff;padding:1em;border-radius:8px'><pre style='white-space:pre-wrap'>{text}</pre></div>", unsafe_allow_html=True)
+                        with open('Sample-AI Overview.docx', 'rb') as f:
+                            default_file = BytesIO(f.read())
+                        input_data.append(("DOCX", default_file))
+                        st.info("No files uploaded. Using default document for chat.")
                     except Exception as e:
                         st.error(f"Could not read default document: {e}")
-                    return
+                        return
 
                 vectorstore = process_input(input_data)
                 st.session_state["vectorstore"] = vectorstore
