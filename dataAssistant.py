@@ -193,6 +193,15 @@ def main():
         </div>""",
         unsafe_allow_html=True
     )
+    # Short description for all users
+    st.markdown(
+        """
+        <div style='margin-top:1em;margin-bottom:1em;padding:1em;background:#e3f2fd;border-radius:8px;'>
+        <b>What is this?</b> This app lets anyone chat with the contents of a document using AI. By default, it loads "Sample-AI Overview.docx" so you can ask questions and get instant answers from the document. It’s useful for anyone who wants quick insights or information from documents without reading them fully.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     with st.sidebar:
         st.markdown("## 🗂️ Document Upload Zone")
@@ -205,47 +214,84 @@ def main():
             docx_files = st.file_uploader("Word Documents", type="docx",
                                           accept_multiple_files=True,
                                           help="Upload Word documents")
-            # Removed TXT and PPTX upload options
 
-        if st.button("✨ Process Documents", use_container_width=True):
+        # If user uploads files, show Process Documents button
+        files_uploaded = (pdf_files and len(pdf_files) > 0) or (docx_files and len(docx_files) > 0)
+        if files_uploaded:
+            if st.button("✨ Process Documents", use_container_width=True):
+                try:
+                    input_data = []
+                    if pdf_files:
+                        input_data.extend([("PDF", file) for file in pdf_files])
+                    if docx_files:
+                        input_data.extend([("DOCX", file) for file in docx_files])
+
+                    vectorstore = process_input(input_data)
+                    st.session_state["vectorstore"] = vectorstore
+                    st.session_state["memory"] = ConversationSummaryBufferMemory(
+                        llm=ChatOpenAI(model="gpt-4", openai_api_key=openai_api_key),
+                        memory_key="chat_history",
+                        max_token_limit=500
+                    )
+                    st.session_state["messages"] = [
+                        {"role": "assistant", "content": "Hello! How can I assist you today?"}
+                    ]
+                    st.success("Inputs processed successfully!")
+                except Exception as e:
+                    st.error(f"Error processing input: {e}")
+        # If no files uploaded and no vectorstore, auto-process default file
+        elif "vectorstore" not in st.session_state:
             try:
-                input_data = []
-                if pdf_files:
-                    input_data.extend([("PDF", file) for file in pdf_files])
-                if docx_files:
-                    input_data.extend([("DOCX", file) for file in docx_files])
-                # Removed TXT and PPTX file processing
-
-                if not input_data:
-                    # If no files uploaded, process the default DOCX for chat
-                    try:
-                        with open('Sample-AI Overview.docx', 'rb') as f:
-                            default_file = BytesIO(f.read())
-                        input_data.append(("DOCX", default_file))
-                        st.info("No files uploaded. Using default document for chat.")
-                    except Exception as e:
-                        st.error(f"Could not read default document: {e}")
-                        return
-
+                with open('Sample-AI Overview.docx', 'rb') as f:
+                    default_file = BytesIO(f.read())
+                input_data = [("DOCX", default_file)]
                 vectorstore = process_input(input_data)
                 st.session_state["vectorstore"] = vectorstore
                 st.session_state["memory"] = ConversationSummaryBufferMemory(
                     llm=ChatOpenAI(model="gpt-4", openai_api_key=openai_api_key),
                     memory_key="chat_history",
-                    max_token_limit=500  # Adjust token limit for summarization
+                    max_token_limit=500
                 )
                 st.session_state["messages"] = [
                     {"role": "assistant", "content": "Hello! How can I assist you today?"}
                 ]
-                st.success("Inputs processed successfully!")
+                st.info("No files uploaded. Using default document for chat.")
             except Exception as e:
-                st.error(f"Error processing input: {e}")
+                st.error(f"Could not read default document: {e}")
     # ... [keep your existing processing code here] ...
 
     # Chat interface
     if "vectorstore" in st.session_state and "memory" in st.session_state:
         st.markdown("### 💬 Chat with Your Data")
         st.markdown("Ask anything about your uploaded data!")
+
+        # Show sample questions only if default doc is loaded (no user upload this session)
+        files_uploaded = False
+        with st.sidebar:
+            pdf_files = st.session_state.get('pdf_files', None)
+            docx_files = st.session_state.get('docx_files', None)
+            if (pdf_files and len(pdf_files) > 0) or (docx_files and len(docx_files) > 0):
+                files_uploaded = True
+
+        if not files_uploaded:
+            st.markdown("#### Example Questions:")
+            sample_questions = [
+                "What are the three types of AI mentioned in the document?",
+                "How is AI used in the finance industry?",
+                "For what purposes does Amazon Alexa employ AI?"
+            ]
+            for q in sample_questions:
+                if st.button(q, key=q):
+                    st.session_state.messages.append({"role": "user", "content": q})
+                    st.chat_message("user").write(q)
+                    try:
+                        vectorstore = st.session_state["vectorstore"]
+                        memory = st.session_state["memory"]
+                        response = answer_question(vectorstore, q, memory)
+                        st.session_state.messages.append({"role": "assistant", "content": response})
+                        st.chat_message("assistant").write(response)
+                    except Exception as e:
+                        st.error(f"Error generating response: {e}")
 
         # Display chat messages
         for msg in st.session_state.messages:
