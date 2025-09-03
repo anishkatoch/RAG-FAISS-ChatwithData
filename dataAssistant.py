@@ -205,12 +205,7 @@ def main():
             docx_files = st.file_uploader("Word Documents", type="docx",
                                           accept_multiple_files=True,
                                           help="Upload Word documents")
-            txt_files = st.file_uploader("Text Files", type="txt",
-                                         accept_multiple_files=True,
-                                         help="Upload plain text files")
-            pptx_files = st.file_uploader("Presentations", type="pptx",
-                                          accept_multiple_files=True,
-                                          help="Upload PowerPoint presentations")
+            # Removed TXT and PPTX upload options
 
         if st.button("✨ Process Documents", use_container_width=True):
             try:
@@ -219,10 +214,7 @@ def main():
                     input_data.extend([("PDF", file) for file in pdf_files])
                 if docx_files:
                     input_data.extend([("DOCX", file) for file in docx_files])
-                if txt_files:
-                    input_data.extend([("TXT", file) for file in txt_files])
-                if pptx_files:
-                    input_data.extend([("PPTX", file) for file in pptx_files])
+                # Removed TXT and PPTX file processing
 
                 if not input_data:
                     # If no files uploaded, process the default DOCX for chat
