@@ -5,7 +5,7 @@ from io import BytesIO
 from docx import Document
 import numpy as np
 from PyPDF2 import PdfReader
-from langchain.chains import RetrievalQA
+from langchain.chains.retrieval_qa.base import RetrievalQA
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -324,3 +324,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
