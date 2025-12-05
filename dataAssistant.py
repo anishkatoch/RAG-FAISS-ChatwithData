@@ -8,16 +8,15 @@ from PyPDF2 import PdfReader
 from langchain.chains.retrieval_qa.base import RetrievalQA
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.docstore.in_memory import InMemoryDocstore
-from langchain.chat_models import ChatOpenAI
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.docstore.in_memory import InMemoryDocstore
+from langchain_community.chat_models import ChatOpenAI
 from dotenv import load_dotenv
 from pptx import Presentation
 # Load environment variables
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
-
 if not openai_api_key:
     st.error("OpenAI API Key is not set. Please add it to your environment variables.")
     st.stop()
@@ -52,8 +51,8 @@ def answer_question(vectorstore, query, memory):
         )
 
         # Run the chain and return the output
-        response = qa_chain.run(query)
-        return response
+        response = qa_chain.invoke({"query": query})
+        return response["result"]
 
     except ValueError as ve:
         raise ValueError(f"ValueError in answer_question: {ve}")
@@ -289,7 +288,7 @@ def main():
                         memory = st.session_state["memory"]
                         response = answer_question(vectorstore, q, memory)
                         st.session_state.messages.append({"role": "assistant", "content": response})
-                        st.chat_message("assistant").write(response)
+                        st.chat_message("assistant").markdown(response)
                     except Exception as e:
                         st.error(f"Error generating response: {e}")
 
@@ -324,4 +323,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
