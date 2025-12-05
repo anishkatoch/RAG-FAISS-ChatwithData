@@ -12,5 +12,5 @@ faiss-cpu
 python-docx
 openai
 tiktoken
-langchain.chains
 python-pptx
+
