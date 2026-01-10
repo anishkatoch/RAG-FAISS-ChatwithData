@@ -103,5 +103,3 @@ Each file is parsed, processed, split, embedded using OpenAI embeddings, and sto
 - ✅ Embedding via OpenAI API
 - ✅ FAISS vector search with top-k document retrieval
 
----
-
