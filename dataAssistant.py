@@ -5,7 +5,7 @@ from io import BytesIO
 from docx import Document
 import numpy as np
 from PyPDF2 import PdfReader
-from langchain_classic.chains import RetrievalQA
+from langchain.chains import RetrievalQA
 from langchain_classic.memory import ConversationSummaryBufferMemory
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OpenAIEmbeddings
