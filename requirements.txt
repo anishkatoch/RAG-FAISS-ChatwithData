@@ -9,3 +9,4 @@ openai
 langchain
 langchain-community
 langchain-text-splitters
+tiktoken
